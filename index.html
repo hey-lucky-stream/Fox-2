@@ -2,11 +2,12 @@
 <html lang="en">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
     <script src="https://ssl.p.jwpcdn.com/player/v/8.32.1/jwplayer.js" type="text/javascript"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Player</title>
-<link rel="stylesheet" href="https://cxh.pages.dev/style.css">
+    <link rel="stylesheet" href="https://cxh.pages.dev/style.css">
     <style>
         body {
             margin: 0;
@@ -107,12 +108,12 @@
 
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout
+                const timeoutId = setTimeout(() => controller.abort(), 3000);
 
                 await fetch(new Request(googleAdUrl), { signal: controller.signal })
                     .then(() => clearTimeout(timeoutId))
                     .catch(error => {
-                        if (error.name === 'AbortError') return; // Ignore timeout errors
+                        if (error.name === 'AbortError') return;
                         adBlockEnabled = true;
                     });
 
