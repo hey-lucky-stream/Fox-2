@@ -1,28 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plyr HLS Player</title>
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      background: black; /* Optional */
+      background-color: #000;
     }
-    #contentFrame {
-      width: 100vw;
-      height: 100vh; /* or any specific height you want */
-      border: none;
-      position: relative;
-      display: block;
+    video {
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
     }
   </style>
 </head>
 <body>
-  <iframe id="contentFrame" 
-    sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation" 
-    allow="encrypted-media" allowfullscreen="true" scrolling="no"
-    src="https://hey-lucky-stream.github.io/Fox-2/">
-  </iframe>
+
+  <video id="player" controls playsinline></video>
+
+  <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('player');
+    const source = "http://78.40.140.210:9210/86e4228d28529c59b7bcbd3120d17b025278a7618d3d1d533467079161d5/index.m3u8?token=f1443af7cf0f2ad7558e632cf3fd7bbe0e3c22a8ce9d3e7b19506c7ff78e7dc2ed44ca152c3bb78d6c6288a8147b0a188e1e1d443276b97b5398eb16deaaf010057877f4b1d0-e6158983f037ac347d0d065f3b251e60";
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(source);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        video.play();
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = source;
+      video.addEventListener('loadedmetadata', function () {
+        video.play();
+      });
+    }
+
+    const player = new Plyr(video);
+  </script>
+
 </body>
 </html>
